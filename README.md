@@ -7,3 +7,5 @@ working to add an intermediate step that uses the GPT-3 API to break down foods 
 fairly granular results from the open food facts API. The application also allows sleep, exercise, meditation, and bowl movement 
 tracking. This information is used to attempt to find correlations between behaviors, ingredients, and outcomes (bowl movements). 
 There is also a community tab that shows users trending posts in subreddits relevant to their disease (ex r/ibs).
+
+![alt-text](https://github.com/dleviminzi/what_goes_in/blob/main/README/previewFEB18.gif)
