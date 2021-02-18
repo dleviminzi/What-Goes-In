@@ -8,6 +8,4 @@ fairly granular results from the open food facts API. The application also allow
 tracking. This information is used to attempt to find correlations between behaviors, ingredients, and outcomes (bowl movements). 
 There is also a community tab that shows users trending posts in subreddits relevant to their disease (ex r/ibs).
 
-<center> 
 ![alt-text](https://github.com/dleviminzi/what_goes_in/blob/main/README/previewFEB18.gif)
-</center>
