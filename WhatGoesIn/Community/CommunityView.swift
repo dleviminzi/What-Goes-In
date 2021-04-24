@@ -9,64 +9,52 @@ import SwiftUI
 import CoreData
 
 struct CommunityView: View {
-    @StateObject var viewModel = CommunityView.ViewModel()
-    @Environment(\.managedObjectContext) var moc
+    var psts: Posts?    /* this is a struct that holds reddit posts for json decoding purposes */
+    
+    init(urlS: String) {
+        downloadData(urlString: urlS)   /* accepts an S3 url to json reddit posts */
+    }
     
     var body: some View {
         ScrollView {
-            ForEach(0..<20) { i in
+            /* display each of the comments w/ hyperlink to reddit source */
+            ForEach(0..<psts!.posts.count) { i in
                 Button {
-                    let url = URL(string: String(viewModel.p?.posts[i].parent_url ?? "Error could not load url"))!
+                    let url = URL(string: String(psts?.posts[i].parent_url ?? "Error could not load url"))!
                     UIApplication.shared.open(url)
                 } label: {
                     GroupBox(
                         label: HStack {
-                            Text("r/" + String(viewModel.p?.posts[i].subreddit ?? "Error could not load subreddit"))
+                            Text("r/" + String(psts?.posts[i].subreddit ?? "Error could not load subreddit"))
                         }
                     ) {
-                        Text(viewModel.p?.posts[i].cleaned_body ?? "Error: could not load post")
+                        Text(psts?.posts[i].clean_body ?? "Error: could not load post")
                             .font(.caption)
                             .foregroundColor(Color(.systemBackground)).colorInvert()
                     }
                 }
             }
-        }
+        }.navigationBarTitle("Trending")
     }
-}
-
-extension CommunityView {
-    class ViewModel: ObservableObject {
-        let persistenceController = PersistenceController.shared
-        var moc: NSManagedObjectContext
-        
-        var p: Posts?
-        
-        init() {
-            /* managed object context for persistent storage */
-            moc = persistenceController.container.viewContext
-            downloadData()
-        }
-        
-        
-        func downloadData() {
-            let decoder = JSONDecoder()
-            let urlString = "https://whatgoesinalpha.s3.us-east-2.amazonaws.com/test2.json"
-                        
-            if let url = URL(string: urlString) {
-                if let data = try? Data(contentsOf: url) {
-                    do {
-                        try self.p = decoder.decode(Posts.self, from: data)
-                    } catch {
-                        print("rip")
-                    }
+    
+    mutating func downloadData(urlString: String) {
+        let decoder = JSONDecoder()
+                    
+        if let url = URL(string: urlString) {
+            if let data = try? Data(contentsOf: url) {
+                do {
+                    try psts = decoder.decode(Posts.self, from: data)
+                } catch {
+                    print("Failed to decode reddit posts/comments json, nothing will display!")
                 }
             }
         }
     }
 }
 
+
 struct CommunityView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunityView()
+        CommunityView(urlS: "https://whatgoesinalpha.s3.us-east-2.amazonaws.com/Celiac/Celiac_top20_posts.json")
     }
 }

@@ -24,7 +24,7 @@ struct InputView: View {
                     /* view title (same as app title) */
                     HStack {
                         Text("  What goes in... comes out...")
-                            .font(.title2)
+                            .font(.title)
                             .bold()
                             .foregroundColor(Color(.systemBackground)).colorInvert()
                         Spacer()

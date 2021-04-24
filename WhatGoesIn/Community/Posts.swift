@@ -11,10 +11,11 @@ struct Post: Codable {
     var parent_url: String
     var parent_upvotes: Int
     var comment_upvotes: Int
-    var _date: Int
+    var _date: String
     var subreddit: String
     var body: String
-    var cleaned_body: String
+    var clean_body: String
+    var pres_body: String
 }
 
 struct Posts: Codable {

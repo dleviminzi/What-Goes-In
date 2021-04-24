@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct PlainGroupBoxStyle: GroupBoxStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -13,7 +14,7 @@ struct PlainGroupBoxStyle: GroupBoxStyle {
             configuration.label
             configuration.content
         }
-        .padding(19)
+        .padding(10)
         .background(
             Color(.systemGray3)
         )
@@ -54,7 +55,16 @@ struct PooInputView: View {
 
 struct PooPickerView: View {
     let pooTypes = ["Hard and Lumpy 😖", "Lumpy Sausage 😣", "Sausage with Cracks 🥳", "Smooth, Soft Snake 🥳",
-                    "Jagged Blobs 🤨", "Fluffy Blobs 🥴", "Just Liquid 😩", "Color"]
+                    "Jagged Blobs 🤨", "Fluffy Blobs 🥴", "Just Liquid 😩"]
+    let pooDesc = ["This is an indicator that you are severely constipated.", "This is an indicator that you are somewhat consitpated.", "Congrats that is a nice, healthy poop you're staring at.", "Everyone would be jealous of a poop this healthy.",
+                   "This is not too bad, but eat more fibre!", "This is an indicator of inflammation.", "This is an indicator of inflamation and diarrhea."]
+    let persistenceController = PersistenceController.shared
+    var moc: NSManagedObjectContext
+
+    init() {
+        /* managed object context for persistent storage */
+        moc = persistenceController.container.viewContext
+    }
     
     var body: some View {
         ZStack {
@@ -62,35 +72,55 @@ struct PooPickerView: View {
                 .ignoresSafeArea()
             
             ScrollView {
-                LazyVGrid( columns: [.init(), .init()]) {
-                    ForEach(0..<8) { i in
-                        Button(action: {
-                            /* need to create new poop entry -.- */
-                            print("picked poo: \(pooTypes[i])")
-                        }) {
-                            GroupBox(
-                                label: Label("", image: "poo\(i+1)")
+                ForEach(0..<7) { i in
+                    Button(action: {
+                        let poo = Poop(context: moc)
+                        poo.id = UUID()
+                        poo.name = pooTypes[i]
+                        poo.type = Int16(i+1)
+                        
+                        do {
+                            try self.moc.save()
+                        } catch {
+                            print(error)
+                        }
+                    }) {
+                        GroupBox(
+                        ) {
+                            HStack {
+                                VStack {
+                                    Text(pooTypes[i])
+                                        .font(.caption)
+                                        .bold()
+                                        .frame(width: 150, height: 10, alignment: .center)
+                                        .foregroundColor(Color.red)
+                                    Text(pooDesc[i])
+                                        .font(.caption2)
+                                        .foregroundColor(Color(.systemBackground)).colorInvert()
+                                }
+                                Spacer()
+                                Label("", image: "\(i+1)")
                                     .scaleEffect(0.3, anchor: .center)
                                     .frame(width: 150, height: 80, alignment: .center)
-                            ) {
-                                Text(pooTypes[i])
-                                    .frame(width: 150, height: 10, alignment: .center)
-                                    .font(.caption)
-                                    .foregroundColor(Color.red)
                             }
+
                         }
-                    }.padding(1)
-                }
+                    }
+                }.padding(1)
+                
             }
         }
-        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarTitle("Select the best fitting description", displayMode: .inline)
     }
 }
 
 // MARK: - Poo log view
 struct PooLogView: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(entity: Poop.entity(), sortDescriptors: []) var poos: FetchedResults<Poop>
+    @FetchRequest(
+        entity: Poop.entity(),
+        sortDescriptors: []
+    ) var poos: FetchedResults<Poop>
     
     var body: some View {
         VStack {
@@ -119,6 +149,12 @@ struct PooLogView: View {
         .navigationBarTitle("Poop Entries")
 
    }
+    func dateForm(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d"
+        return formatter.string(from: date)
+    }
+
 }
 
 

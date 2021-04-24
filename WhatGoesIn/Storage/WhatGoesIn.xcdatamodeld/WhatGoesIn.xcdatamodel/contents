@@ -23,8 +23,10 @@
         <attribute name="length" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Poop" representedClassName="Poop" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Sleep" representedClassName="Sleep" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -35,9 +37,9 @@
         <element name="CommentIBS" positionX="-54" positionY="18" width="128" height="74"/>
         <element name="Exercise" positionX="-36" positionY="27" width="128" height="89"/>
         <element name="Food" positionX="-63" positionY="-18" width="128" height="14"/>
-        <element name="Meditation" positionX="-18" positionY="63" width="128" height="74"/>
-        <element name="Poop" positionX="0" positionY="81" width="128" height="59"/>
-        <element name="Sleep" positionX="-63" positionY="-9" width="128" height="74"/>
         <element name="Ingredients" positionX="-27" positionY="54" width="128" height="14"/>
+        <element name="Meditation" positionX="-18" positionY="63" width="128" height="74"/>
+        <element name="Poop" positionX="0" positionY="81" width="128" height="89"/>
+        <element name="Sleep" positionX="-63" positionY="-9" width="128" height="74"/>
     </elements>
 </model>

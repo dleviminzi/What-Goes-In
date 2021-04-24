@@ -27,14 +27,12 @@ struct HomeView: View {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
 
             
-            // MARK: - POO PICKER
-            CommunityView()
+            // MARK: - COMMUNITY VIEW
+            CommunitySelectorView()
                 .tabItem {
                     Image(systemName: "person.3")
                     Text("Community")
                 }
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            
         }
         .onAppear() {
             UITabBar.appearance().barTintColor = UIColor(Color(.white))

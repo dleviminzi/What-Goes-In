@@ -39,7 +39,6 @@ struct ExerciseInputView: View {
                                     viewModel.inputNewExercise(name: exerciseTypes[i], length: Int16(exerciseLengthsMin[j]))
                                 } label: {
                                     Text(exerciseLengths[j])
-                                    Image(systemName: "arrow.up.and.down.circle")
                                 }
                             }
                         } label: {
@@ -92,7 +91,7 @@ struct ExerciseLogView: View {
                 ForEach(exers, id: \.id) { exercise in
                     HStack {
                         Text(exercise.name ?? "??")
-                        Text(String(exercise.length) + " hours")
+                        Text(String(exercise.length) + " minutes")
                         Spacer()
                         Button("Edit") {
                             

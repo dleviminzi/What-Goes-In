@@ -50,8 +50,6 @@ extension FoodDrinkInputView {
                 if let data = try? Data(contentsOf: url) {
                     if let apiRes = try? decoder.decode(OFFFood.self, from: data) {
                         /* TODO: [] srsly fix response to potential, inevitable failure */
-                        
-                        
                         let food = Food(context: moc)
                         food.id = UUID()
                         food.name = apiRes.product.product_name
@@ -79,7 +77,17 @@ extension FoodDrinkInputView {
             if let url = URL(string: edamamEndPoint) {
                 if let data = try? Data(contentsOf: url) {
                     if let apiRes = try? decoder.decode(EdamamFood.self, from: data) {
-                        print(apiRes.parsed[0]["food"]?.label ?? "shit")
+                        
+                        let food = Food(context: moc)
+                        food.id = UUID()
+                        food.name = apiRes.parsed[0]["food"]?.label
+                        food.date = Date()
+                        
+                        do {
+                            try self.moc.save()
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
             }
